@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: vehicles
+    // Fields: name, brand, category, basePrice, maxPrice, imageUrl, etc.
+    //
+    // Collection: articles
+    // Fields: title, slug, content, type, publishedAt, keywords
+    //
+    // Collection: prices_history
+    // Fields: vehicleId, price, date, source
+    //
+    // Collection: charging_stations
+    // Fields: name, provider, address, latitude, longitude, status
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "prowebvietnam@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    function isValidString(field, maxLen) {
+      return request.resource.data[field] is string && request.resource.data[field].size() <= maxLen;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // Public read access to shared content
+    match /vehicles/{vehicleId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /articles/{articleId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /prices_history/{historyId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /charging_stations/{stationId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "xedien.top – TOP Xe Điện Việt Nam",
+  "description": "Nền tảng tra cứu giá, so sánh và đánh giá xe điện toàn diện nhất Việt Nam. Cập nhật giá xe máy điện, xe đạp điện, ô tô điện mỗi ngày bằng AI.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": []
+}

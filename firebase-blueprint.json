@@ -1,0 +1,80 @@
+{
+  "entities": {
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "EV model information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "brand": { "type": "string" },
+        "category": { "type": "string", "enum": ["electric_bike", "electric_motorcycle", "electric_car", "electric_truck", "electric_bus", "specialized"] },
+        "basePrice": { "type": "number" },
+        "maxPrice": { "type": "number" },
+        "batteryType": { "type": "string" },
+        "batteryCapacity": { "type": "string" },
+        "rangePerCharge": { "type": "number", "description": "km per charge" },
+        "topSpeed": { "type": "number", "description": "km/h" },
+        "motorPower": { "type": "string" },
+        "chargingTime": { "type": "string" },
+        "operatingCostPerKm": { "type": "number" },
+        "maintenanceCostPerYear": { "type": "number" },
+        "comparisonVsGas": { "type": "object" },
+        "imageUrl": { "type": "string" },
+        "rating": { "type": "number" },
+        "specifications": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "brand", "category", "basePrice"]
+    },
+    "PriceHistory": {
+      "title": "PriceHistory",
+      "description": "Historical price tracking for a vehicle",
+      "type": "object",
+      "properties": {
+        "vehicleId": { "type": "string" },
+        "price": { "type": "number" },
+        "date": { "type": "string", "format": "date" },
+        "source": { "type": "string" }
+      },
+      "required": ["vehicleId", "price", "date"]
+    },
+    "Article": {
+      "title": "Article",
+      "description": "AI-generated or editorial articles",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "type": { "type": "string", "enum": ["daily", "weekly", "monthly", "review"] },
+        "publishedAt": { "type": "string", "format": "date-time" },
+        "thumbnailUrl": { "type": "string" },
+        "keywords": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["title", "slug", "content", "type"]
+    },
+    "ChargingStation": {
+      "title": "ChargingStation",
+      "description": "EV charging station location in Vietnam",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "provider": { "type": "string" },
+        "address": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "connectorTypes": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["active", "maintenance", "planned"] }
+      },
+      "required": ["name", "provider", "latitude", "longitude"]
+    }
+  },
+  "firestore": {
+    "/vehicles": { "schema": "Vehicle", "description": "Vehicle catalog" },
+    "/prices_history": { "schema": "PriceHistory", "description": "Price history log" },
+    "/articles": { "schema": "Article", "description": "News and AI reports" },
+    "/charging_stations": { "schema": "ChargingStation", "description": "Map data" }
+  }
+}
